@@ -38,13 +38,14 @@ settles into a rhythm. The palette:
 Variety is not decoration; it is what keeps comprehension high across a long
 read. Assign techniques centrally so no single method is overused.
 
-## 3. Author the sections **(agent, using `gen.py`)**
+## 3. Author the sections **(agent, using the read-thru DSL)**
 
 Each `Section` is an ordered list of blocks: `prose()`, `callout()`, `table()`,
-`diagram()`, `code()`. For code, prefer `code(path, peek=[(a,b)])` to spotlight
-the lines that matter while keeping the rest folded and present. Write the prose
-**tight from the start** (see step 7) — short, varied sentences; sparse
-em-dashes; plain vocabulary.
+`diagram()`, `code()` (cheatsheet: [`dsl.md`](./dsl.md)). For code, prefer
+`code(path, peek=[(a,b)])` to spotlight the lines that matter while keeping the
+rest folded and present. Size the guide to the change — see
+[`depth-and-scope.md`](./depth-and-scope.md). Write the prose **tight from the
+start** (see step 7) — short, varied sentences; sparse em-dashes; plain vocabulary.
 
 ## 4. Draw and render the diagrams **(agent + script)**
 
@@ -52,17 +53,19 @@ Author Mermaid sources (apply real craft: ownership colors, subgraphs, styled
 links, emojis for recognition). Render them to inline SVG at build time:
 
 ```sh
-./tools/render_diagrams.sh <diagrams_dir> <svg_out_dir>
+extras/render_diagrams.sh <diagrams_dir> <svg_out_dir>   # optional; needs npx
 ```
 
 Rendering at build time validates the syntax and yields crisp, CDN-free SVG.
+Diagrams are optional — most guides need none, and they pull in a Node toolchain
+(see [`../extras/README.md`](../extras/README.md)).
 
 ## 5. Build the self-contained HTML **(script)**
 
-`gen.build()` inlines the fonts, Pygments styles, CSS, JS, and SVG into one file.
-The build also enforces a **completeness contract**: pass the list of files that
-must appear, and it errors if any is missing and reports total code rows. For a
-full edition, code rows should equal the source's line count.
+`read-thru build content.py --source <root>` inlines the fonts, Pygments styles,
+CSS, JS, and SVG into one file. The build also enforces a **completeness
+contract**: set `ALL_FILES` and it errors if any is missing and reports total
+code rows. For a full edition, code rows should equal the source's line count.
 
 ## 6. Adversarially verify every claim **(agent)**
 
@@ -85,7 +88,7 @@ a fix-and-recheck loop.
 Run the [unsloppable](https://github.com/mseeks/unsloppable) linter over the built HTML:
 
 ```sh
-uv run python tools/lint_prose.py <built.html>
+uv run python extras/lint_prose.py <built.html>   # optional; needs unsloppable
 ```
 
 It flags prose that reads as AI-written (heavy em-dashes, uniform sentence
@@ -109,7 +112,7 @@ editions so the reader can drop into the full one for context.
 - Spot-check that code rows equal line counts.
 - Screenshot a few sections in **both themes** to catch layout breaks:
   ```sh
-  node tools/screenshot.js <built.html> out light "0,#some-section-id"
+  node extras/screenshot.js <built.html> out light "0,#some-section-id"
   ```
 
 ---

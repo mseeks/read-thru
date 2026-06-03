@@ -8,7 +8,10 @@ changelog reach, the PR-body fix, and the proof. Prose is kept plain.
 """
 from __future__ import annotations
 
-from gen import Section, build, callout, code, diagram, prose, raw, table
+from read_thru import Section, callout, code, diagram, prose, raw, table
+
+TITLE = "froot — Python (uv) support, explained"
+TOC_TITLE = "froot · the uv ecosystem PR"
 
 SECTIONS: list[Section] = []
 
@@ -503,6 +506,6 @@ exactly as it was.
     ],
 ))
 
-
-if __name__ == "__main__":
-    build(SECTIONS, [])
+# Build with the CLI:
+#   read-thru build content.py --source <workspace> --out froot-uv-pr.html \
+#       --svg-dir examples/froot-uv-pr/svg

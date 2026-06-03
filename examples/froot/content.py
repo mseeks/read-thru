@@ -4,7 +4,7 @@ Run with the build venv's python:  .doc_build/venv/bin/python .doc_build/content
 """
 from __future__ import annotations
 
-from gen import Section, build, callout, code, diagram, prose, raw, table
+from read_thru import Section, callout, code, diagram, prose, raw, table
 
 SECTIONS: list[Section] = []
 
@@ -2337,6 +2337,4 @@ limits, and does exactly what it claims**. That's a thing you can stand behind.
 
 
 # === MORE SECTIONS INSERTED ABOVE THIS LINE ===
-
-if __name__ == "__main__":
-    build(SECTIONS, ALL_FILES)
+# Build with the CLI:  read-thru build content.py --source <workspace> --out froot.html

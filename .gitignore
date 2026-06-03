@@ -6,10 +6,13 @@ __pycache__/
 *.pyc
 
 # build + QA artifacts (the source content + pre-rendered svg are tracked)
-examples/**/froot-explained.html
+# the one rendered golden we DO commit is re-included below
 examples/**/*.html
+!examples/pr-sample/sample.html
+read-thru.html
 shots/
 *.png
 *.err
 
 .DS_Store
+.ruff_cache/

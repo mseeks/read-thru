@@ -7,7 +7,7 @@ Prose is kept deliberately plain. Build with the doc venv's python.
 """
 from __future__ import annotations
 
-from gen import Section, build, callout, code, diagram, prose, raw, table
+from read_thru import Section, callout, code, diagram, prose, raw, table
 
 SECTIONS: list[Section] = []
 
@@ -620,6 +620,4 @@ walks every one of the 2,986 source lines, if you want to read the rest.
 ))
 
 # === MORE SECTIONS INSERTED ABOVE THIS LINE ===
-
-if __name__ == "__main__":
-    build(SECTIONS, [])
+# Build with the CLI:  read-thru build content_lite.py --source <workspace> --out froot.html
