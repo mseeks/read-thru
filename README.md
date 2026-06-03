@@ -63,7 +63,7 @@ read-thru/
     page.py          TOC + the self-contained build()
     cli.py           `read-thru build` / `read-thru new`
     assets/          style.css, app.js, fonts.css, fonts/ (inlined into output)
-  references/        process.md · dsl.md · depth-and-scope.md · deploy.md
+  references/        process.md · dsl.md · depth-and-scope.md
   examples/          pr-sample/ (S) · froot-uv-pr/ (M) · froot/ (L) — the goldens
   extras/            optional Node/QA/prose-lint tooling (off the default path)
 ```

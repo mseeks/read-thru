@@ -94,8 +94,5 @@ Read these before authoring — they set the target for content, prose, and dept
 - **[`examples/froot-uv-pr/`](./examples/froot-uv-pr/)** — a meatier real PR.
 - **[`examples/froot/`](./examples/froot/)** — the whole-repo exemplar.
 
-## When the guide is for a PR: publish & link it
-
-After building a PR guide, deploy it to the static site and drop a bare link
-(no preamble, clean URL without `.html`) into the PR. Full steps, naming, and
-the URL scheme: **[`references/deploy.md`](./references/deploy.md)**.
+The guide is a single self-contained HTML file. What you do with it next —
+open it, attach it, publish it somewhere — is up to the caller.
