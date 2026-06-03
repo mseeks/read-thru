@@ -1,0 +1,38 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif, system-ui, sans-serif','edgeLabelBackground':'#ffffff','lineColor':'#9e9e9e','primaryTextColor':'#263238','tertiaryTextColor':'#37474f'}}}%%
+
+flowchart LR
+    %% froot — the dependency-patch loop, closing through external truth
+    Schedule["⏰ Durable schedule<br/>(Temporal timer)"]
+    Scan["🔍 Scan candidates<br/>(checkout · npm · deterministic)"]
+    Judge["🤖 Judge changelog<br/>(thin pydantic-ai)"]
+    PR["🔀 One PR per bump<br/>(manifest + lockfile)"]
+    CI{"✅ Repo's own CI<br/>green?"}
+    Merge["👤 Human merges<br/>(approval gate)"]
+    Closed["⚑ Leave PR open<br/>(flagged red)"]
+    Record["📊 Record outcome"]
+    GitHub[("🐙 GitHub<br/>outcome ledger")]
+    Click[("📈 ClickStack<br/>run telemetry")]
+
+    Schedule -->|"&nbsp;① signal&nbsp;"| Scan
+    Scan -->|"&nbsp;② action&nbsp;"| Judge
+    Judge --> PR
+    PR -->|"&nbsp;③ durably wait on CI (mins–hrs)&nbsp;"| CI
+    CI -->|"&nbsp;green&nbsp;"| Merge
+    CI -->|"&nbsp;red / timeout&nbsp;"| Closed
+    Merge -->|"&nbsp;④ commit&nbsp;"| Record
+    Closed --> Record
+    Record -->|"&nbsp;⑤ update&nbsp;"| GitHub
+    Record --> Click
+    Record -.->|"&nbsp;decays into the next tick's signal&nbsp;"| Schedule
+
+    class Schedule,Scan,PR,Record,Closed chassis
+    class Judge model
+    class CI,GitHub,Click terrain
+    class Merge steward
+    linkStyle 4 stroke:#2e7d32,stroke-width:2px
+    linkStyle 5 stroke:#ef6c00,stroke-width:2px
+    linkStyle 10 stroke:#9e9e9e,stroke-width:1.5px,stroke-dasharray:5
+classDef chassis fill:#e1f5ff,stroke:#0288d1,stroke-width:2px,color:#01579b;
+classDef model fill:#ede7f6,stroke:#5e35b1,stroke-width:2px,color:#311b92;
+classDef terrain fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20;
+classDef steward fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#e65100;

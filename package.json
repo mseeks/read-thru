@@ -1,0 +1,10 @@
+{
+  "name": "read-thru",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Diagram rendering (mermaid-cli) and screenshots (puppeteer) for read-thru. Both drive a system browser via puppeteer.json; install with PUPPETEER_SKIP_DOWNLOAD=1 to skip the bundled Chromium.",
+  "dependencies": {
+    "@mermaid-js/mermaid-cli": "^11",
+    "puppeteer": "^23"
+  }
+}

@@ -1,0 +1,20 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif, system-ui, sans-serif','edgeLabelBackground':'#ffffff','lineColor':'#9e9e9e','primaryTextColor':'#263238','tertiaryTextColor':'#37474f'}}}%%
+
+flowchart LR
+    Start(["▶️ ScanWorkflow.run(params)"]) --> Scan["scan_candidates<br/>(activity)"]
+    Scan --> Disp["for each candidate:<br/>dispatch_bump (idempotent)"]
+    Disp --> Cont{"continuous?"}
+    Cont -->|no| Ret["return ScanResult ∎"]
+    Cont -->|yes| Sleep["⏰ workflow.sleep(interval)<br/>(durable timer — free while idle)"]
+    Sleep --> CAN["♻️ continue_as_new<br/>(fresh history, one tick)"]
+    CAN -.->|"next tick re-derives work<br/>(no stored cursor)"| Start
+
+    class Start,Scan,Disp,Sleep,CAN,Ret spine
+    class Cont steward
+    linkStyle 6 stroke:#0288d1,stroke-width:1.5px,stroke-dasharray:5
+classDef domain fill:#eef2f7,stroke:#5b6b7b,stroke-width:2px,color:#1e293b;
+classDef policy fill:#f1ecfb,stroke:#7e57c2,stroke-width:2px,color:#4527a0;
+classDef port fill:#fdf3e7,stroke:#cc7a30,stroke-width:2px,color:#8a4b12;
+classDef adapter fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20;
+classDef spine fill:#e1f5ff,stroke:#0288d1,stroke-width:2px,color:#01579b;
+classDef ext fill:#eceff1,stroke:#78909c,stroke-width:2px,color:#37474f;

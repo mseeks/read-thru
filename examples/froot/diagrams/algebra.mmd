@@ -1,0 +1,41 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif, system-ui, sans-serif','edgeLabelBackground':'#ffffff','lineColor':'#9e9e9e','primaryTextColor':'#263238','tertiaryTextColor':'#37474f'}}}%%
+
+flowchart LR
+    %% Three parallel discriminated unions kept in lock-step by the state machine.
+    subgraph S["🧊 BumpState (where we are)"]
+      direction TB
+      s1["Discovered"] --> s2["Judged"] --> s3["AwaitingCi"] --> s4["Recorded ∎"]
+    end
+    subgraph EV["📨 LoopEvent (what just happened)"]
+      direction TB
+      e1["ChangelogJudged"]
+      e2["PullRequestReady"]
+      e3["CiResolved"]
+      e4["OutcomeRecorded"]
+    end
+    subgraph EF["⚡ Effect (what to do next)"]
+      direction TB
+      f1["JudgeChangelog"]
+      f2["OpenPullRequest"]
+      f3["AwaitCi"]
+      f4["RecordOutcome"]
+    end
+    s1 -. emits .-> f1
+    f1 -. yields .-> e1
+    e1 ==> s2
+    s2 -. emits .-> f2
+    f2 -. yields .-> e2
+    e2 ==> s3
+    s3 -. emits .-> f3
+    f3 -. yields .-> e3
+    e3 ==> s4
+
+    class s1,s2,s3,s4 domain
+    class e1,e2,e3,e4 policy
+    class f1,f2,f3,f4 spine
+classDef domain fill:#eef2f7,stroke:#5b6b7b,stroke-width:2px,color:#1e293b;
+classDef policy fill:#f1ecfb,stroke:#7e57c2,stroke-width:2px,color:#4527a0;
+classDef port fill:#fdf3e7,stroke:#cc7a30,stroke-width:2px,color:#8a4b12;
+classDef adapter fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20;
+classDef spine fill:#e1f5ff,stroke:#0288d1,stroke-width:2px,color:#01579b;
+classDef ext fill:#eceff1,stroke:#78909c,stroke-width:2px,color:#37474f;

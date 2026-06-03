@@ -1,0 +1,19 @@
+[project]
+name = "read-thru"
+version = "0.1.0"
+description = "Turn a codebase into a self-contained, code-level reading guide you can hand to a reviewer."
+readme = "README.md"
+license = { file = "LICENSE" }
+# Pinned to a uv-managed 3.13 (see .python-version): the local Homebrew 3.14
+# ships a broken pyexpat, mirroring the other zo projects.
+requires-python = ">=3.13,<3.14"
+# The engine is pure-Pygments. Diagram rendering and screenshots use the npm
+# toolchain in package.json (mermaid-cli + puppeteer). The prose linter uses
+# unsloppable, found via UNSLOPPABLE_PATH or a sibling projects/unsloppable.
+dependencies = [
+    "pygments>=2.18",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"

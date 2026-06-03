@@ -1,0 +1,28 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif, system-ui, sans-serif','edgeLabelBackground':'#ffffff','lineColor':'#9e9e9e','primaryTextColor':'#263238','tertiaryTextColor':'#37474f'}}}%%
+
+flowchart TB
+    Start(["judge_changelog(candidate)"]) --> Reg{"GET registry/&lt;pkg&gt;<br/>200?"}
+    Reg -->|no| None1["∅ None"]
+    Reg -->|yes| RepoP{"github_repo_from_registry<br/>repo found?"}
+    RepoP -->|no| None2["∅ None"]
+    RepoP -->|yes| Notes{"release notes for<br/>v&lt;tag&gt; or &lt;tag&gt;?"}
+    Notes -->|no| None3["∅ None"]
+    Notes -->|yes| CL["📝 Changelog(text, source_url)"]
+    None1 --> Unk["UnknownVerdict<br/>(no model call)"]
+    None2 --> Unk
+    None3 --> Unk
+    CL --> Model["🤖 PydanticAiJudge.judge<br/>(the one model call)"]
+    Model --> V["Clean / Risky / Unknown verdict"]
+
+    class Start,Notes,Reg,RepoP adapter
+    class None1,None2,None3,Unk steward
+    class CL domain
+    class Model model
+    class V policy
+    linkStyle 1,3,5 stroke:#ef6c00,stroke-width:1.5px,stroke-dasharray:4
+classDef domain fill:#eef2f7,stroke:#5b6b7b,stroke-width:2px,color:#1e293b;
+classDef policy fill:#f1ecfb,stroke:#7e57c2,stroke-width:2px,color:#4527a0;
+classDef port fill:#fdf3e7,stroke:#cc7a30,stroke-width:2px,color:#8a4b12;
+classDef adapter fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20;
+classDef spine fill:#e1f5ff,stroke:#0288d1,stroke-width:2px,color:#01579b;
+classDef ext fill:#eceff1,stroke:#78909c,stroke-width:2px,color:#37474f;

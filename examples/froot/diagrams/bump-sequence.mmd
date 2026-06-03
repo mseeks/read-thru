@@ -1,0 +1,29 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif, system-ui, sans-serif','edgeLabelBackground':'#ffffff','lineColor':'#9e9e9e','primaryTextColor':'#263238','tertiaryTextColor':'#37474f'}}}%%
+
+sequenceDiagram
+    autonumber
+    participant SM as 🧮 state_machine (pure)
+    participant WF as 🔁 BumpWorkflow._execute
+    participant ACT as ⚙️ activities
+    participant CI as 🐙 repo CI
+
+    Note over SM,WF: transition = start(candidate)
+    SM->>WF: effect JudgeChangelog
+    WF->>ACT: judge_changelog(candidate)
+    ACT-->>WF: ChangelogVerdict
+    WF->>SM: advance(Discovered, ChangelogJudged)
+    SM->>WF: effect OpenPullRequest
+    WF->>ACT: open_pull_request(...)
+    ACT-->>WF: PullRequestRef
+    WF->>SM: advance(Judged, PullRequestReady)
+    SM->>WF: effect AwaitCi
+    loop durable poll until terminal or 1h deadline
+      WF->>ACT: check_ci(head_sha)
+      ACT->>CI: read combined status
+      CI-->>WF: CIPending → sleep(1m) ⏰
+    end
+    CI-->>WF: CIPassed / CIFailed
+    WF->>SM: advance(AwaitingCi, CiResolved)
+    SM->>WF: effect RecordOutcome
+    WF->>ACT: record_outcome(...)  ✅ label + log
+    WF-->>SM: advance → Recorded ∎

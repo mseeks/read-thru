@@ -1,0 +1,40 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif, system-ui, sans-serif','edgeLabelBackground':'#ffffff','lineColor':'#9e9e9e','primaryTextColor':'#263238','tertiaryTextColor':'#37474f'}}}%%
+
+flowchart TB
+    %% Strictly inward-depending layers; arrows point the way imports may go.
+    subgraph Shell["🌍 Impure shell"]
+      direction LR
+      Entry["🚀 worker / scan_starter<br/>(entrypoints)"]
+      Spine["⚙️ workflow spine<br/>(Temporal workflows + activities)"]
+      Adapters["🔌 adapters<br/>(npm · github · model · http · otel)"]
+    end
+    subgraph Seam["🪡 The seam"]
+      Ports["📜 ports<br/>(typed Protocols)"]
+    end
+    subgraph Core["💎 Pure core (no I/O, no framework)"]
+      direction LR
+      Policy["🧮 policy<br/>(candidates · naming · compose · state-machine)"]
+      Domain["🧊 domain<br/>(frozen, closed value objects)"]
+    end
+
+    Entry --> Spine
+    Spine --> Ports
+    Spine --> Policy
+    Adapters -. implements .-> Ports
+    Spine -. interprets effects via .-> Adapters
+    Policy --> Domain
+    Adapters --> Domain
+
+    class Entry,Spine spine
+    class Adapters adapter
+    class Ports port
+    class Policy policy
+    class Domain domain
+    linkStyle 3 stroke:#cc7a30,stroke-width:2px,stroke-dasharray:5
+    linkStyle 4 stroke:#0288d1,stroke-width:2px,stroke-dasharray:5
+classDef domain fill:#eef2f7,stroke:#5b6b7b,stroke-width:2px,color:#1e293b;
+classDef policy fill:#f1ecfb,stroke:#7e57c2,stroke-width:2px,color:#4527a0;
+classDef port fill:#fdf3e7,stroke:#cc7a30,stroke-width:2px,color:#8a4b12;
+classDef adapter fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20;
+classDef spine fill:#e1f5ff,stroke:#0288d1,stroke-width:2px,color:#01579b;
+classDef ext fill:#eceff1,stroke:#78909c,stroke-width:2px,color:#37474f;

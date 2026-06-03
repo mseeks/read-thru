@@ -1,0 +1,26 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif, system-ui, sans-serif','edgeLabelBackground':'#ffffff','lineColor':'#9e9e9e','primaryTextColor':'#263238','tertiaryTextColor':'#37474f'}}}%%
+
+flowchart TB
+    subgraph L3["🔺 Integration — Temporal time-skipping server"]
+      I1["test_bump_workflow · test_scan_workflow<br/>(real spine, mocked activities, fast-forwarded CI wait)"]
+    end
+    subgraph L2["🟦 Seam — activities over in-memory fakes"]
+      M1["test_activities<br/>(FakeForge · FakePackageManager · FakeJudge)"]
+    end
+    subgraph L1["🟩 Pure unit + property — no I/O at all"]
+      U1["domain · policy · adapter parsers · settings<br/>(+ Hypothesis laws on Version)"]
+    end
+    L3 --> L2 --> L1
+
+    class I1 spine
+    class M1 port
+    class U1 domain
+    style L3 fill:#eef7fc,stroke:#0288d1
+    style L2 fill:#fdf3e7,stroke:#cc7a30
+    style L1 fill:#eef7ef,stroke:#2e7d32
+classDef domain fill:#eef2f7,stroke:#5b6b7b,stroke-width:2px,color:#1e293b;
+classDef policy fill:#f1ecfb,stroke:#7e57c2,stroke-width:2px,color:#4527a0;
+classDef port fill:#fdf3e7,stroke:#cc7a30,stroke-width:2px,color:#8a4b12;
+classDef adapter fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20;
+classDef spine fill:#e1f5ff,stroke:#0288d1,stroke-width:2px,color:#01579b;
+classDef ext fill:#eceff1,stroke:#78909c,stroke-width:2px,color:#37474f;

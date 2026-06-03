@@ -1,0 +1,17 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif, system-ui, sans-serif','edgeLabelBackground':'#ffffff','lineColor':'#9e9e9e','primaryTextColor':'#263238','tertiaryTextColor':'#37474f'}}}%%
+
+flowchart LR
+    S1["1 · Close one loop<br/>dependency-patch, end-to-end<br/><b>(you are here)</b>"]
+    S2["2 · Replicate<br/>security-patch<br/>(same chassis, sharper signal)"]
+    S3["3 · Coordinate<br/>notifier loops guard<br/>a running durable app"]
+    S4["4 · Fixers<br/>flaky-test / refactor<br/>(needs an agentic harness)"]
+    S1 ==>|"proves the template"| S2 ==>|"loops read each other"| S3 ==>|"decided on terrain that works"| S4
+
+    class S1 terrain
+    class S2 chassis
+    class S3 model
+    class S4 steward
+classDef chassis fill:#e1f5ff,stroke:#0288d1,stroke-width:2px,color:#01579b;
+classDef model fill:#ede7f6,stroke:#5e35b1,stroke-width:2px,color:#311b92;
+classDef terrain fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20;
+classDef steward fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#e65100;

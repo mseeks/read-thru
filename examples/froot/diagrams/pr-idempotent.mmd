@@ -1,0 +1,27 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif, system-ui, sans-serif','edgeLabelBackground':'#ffffff','lineColor':'#9e9e9e','primaryTextColor':'#263238','tertiaryTextColor':'#37474f'}}}%%
+
+sequenceDiagram
+    autonumber
+    participant W as 🔁 BumpWorkflow
+    participant A as ⚙️ open_pull_request
+    participant F as 🔌 GitHubForge
+    participant GH as 🐙 GitHub
+    W->>A: OpenPullRequest(candidate, verdict)
+    A->>F: find_open_pull_request(branch)
+    F->>GH: GET /pulls?head=owner:branch&state=open
+    alt PR already exists
+      GH-->>F: [ existing PR ]
+      F-->>A: PullRequestRef
+      Note over A: short-circuit — no checkout/apply/push
+    else none yet
+      GH-->>F: [ ]
+      A->>F: checkout + apply_patch_bump + push_branch
+      A->>F: open_pull_request(draft)
+      F->>GH: POST /pulls
+      alt 422 (branch race)
+        F->>GH: re-find open PR
+        GH-->>F: existing PR
+      end
+      F-->>A: PullRequestRef
+    end
+    A-->>W: PullRequestReady(pr)

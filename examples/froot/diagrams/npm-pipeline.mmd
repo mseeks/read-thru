@@ -1,0 +1,23 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif, system-ui, sans-serif','edgeLabelBackground':'#ffffff','lineColor':'#9e9e9e','primaryTextColor':'#263238','tertiaryTextColor':'#37474f'}}}%%
+
+flowchart TB
+    PJ["📄 package.json"] --> Direct["parse_direct_dependencies<br/>(deps + devDeps)"]
+    PL["🔒 package-lock.json"] --> Locked["parse_locked_versions<br/>(v2/3 packages → v1 fallback)"]
+    Direct --> Loop{"for each direct dep<br/>with a locked version"}
+    Locked --> Loop
+    Loop -->|"npm view &lt;pkg&gt; versions --json"| Versions["parse_versions<br/>(drop unparseable)"]
+    Versions --> AU["📦 AvailableUpgrade<br/>(current + available[])"]
+    AU --> Policy["🧮 select_patch_candidates<br/>(pure policy, not the adapter)"]
+    Policy --> PC["✅ PatchCandidate[]"]
+
+    class PJ,PL ext
+    class Direct,Locked,Versions,Loop adapter
+    class AU domain
+    class Policy policy
+    class PC domain
+classDef domain fill:#eef2f7,stroke:#5b6b7b,stroke-width:2px,color:#1e293b;
+classDef policy fill:#f1ecfb,stroke:#7e57c2,stroke-width:2px,color:#4527a0;
+classDef port fill:#fdf3e7,stroke:#cc7a30,stroke-width:2px,color:#8a4b12;
+classDef adapter fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20;
+classDef spine fill:#e1f5ff,stroke:#0288d1,stroke-width:2px,color:#01579b;
+classDef ext fill:#eceff1,stroke:#78909c,stroke-width:2px,color:#37474f;

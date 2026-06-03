@@ -1,0 +1,16 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif, system-ui, sans-serif','edgeLabelBackground':'#ffffff','lineColor':'#9e9e9e','primaryTextColor':'#263238','tertiaryTextColor':'#37474f'}}}%%
+
+stateDiagram-v2
+    direction LR
+    [*] --> Discovered : start(candidate)
+    Discovered --> Judged : ChangelogJudged / emit OpenPullRequest
+    Judged --> AwaitingCi : PullRequestReady / emit AwaitCi
+    AwaitingCi --> Recorded : CiResolved(terminal) / emit RecordOutcome
+    AwaitingCi --> AwaitingCi : CiResolved(pending) ⇒ REJECTED (no move)
+    Recorded --> [*] : OutcomeRecorded ⇒ IGNORED (loop complete)
+
+    note right of Discovered
+      Any unexpected event in any
+      state ⇒ REJECTED transition,
+      never an exception.
+    end note

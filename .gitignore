@@ -1,0 +1,15 @@
+# build env
+.venv/
+venv/
+node_modules/
+__pycache__/
+*.pyc
+
+# build + QA artifacts (the source content + pre-rendered svg are tracked)
+examples/**/froot-explained.html
+examples/**/*.html
+shots/
+*.png
+*.err
+
+.DS_Store
