@@ -1,0 +1,25 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif, system-ui, sans-serif','edgeLabelBackground':'#ffffff','lineColor':'#9e9e9e','primaryTextColor':'#263238','tertiaryTextColor':'#37474f'}}}%%
+
+flowchart TB
+    Act["⚙️ scan_candidates · open_pull_request<br/>(activities — chassis)"]
+    Reg["🧭 package_manager_for(ecosystem)<br/>(new dispatch)"]
+    Port["📜 PackageManager<br/>(Protocol — the seam)"]
+    Npm["🔌 NpmPackageManager<br/>(unchanged)"]
+    Uv["🆕 UvPackageManager<br/>(this PR)"]
+    Loop["♻️ state machine · bump &amp; scan workflows<br/>CI wait · record outcome<br/>(0 lines changed)"]
+
+    Act -->|"target.ecosystem"| Reg
+    Reg -->|"Ecosystem.NPM"| Npm
+    Reg -->|"Ecosystem.UV"| Uv
+    Npm -.->|"satisfies (structural)"| Port
+    Uv -.->|"satisfies (structural)"| Port
+    Act --> Loop
+
+    class Reg,Uv new
+    class Act,Npm,Loop keep
+    class Port port
+classDef new fill:#e8f5e9,stroke:#2e7d32,stroke-width:2.5px,color:#1b5e20;
+classDef keep fill:#eef2f7,stroke:#5b6b7b,stroke-width:2px,color:#1e293b;
+classDef port fill:#fdf3e7,stroke:#cc7a30,stroke-width:2px,color:#8a4b12;
+classDef ext fill:#eceff1,stroke:#78909c,stroke-width:2px,color:#37474f;
+classDef drop fill:#fdeaea,stroke:#c0392b,stroke-width:2px,color:#7b241c;

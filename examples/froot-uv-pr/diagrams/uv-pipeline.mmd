@@ -1,0 +1,32 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif, system-ui, sans-serif','edgeLabelBackground':'#ffffff','lineColor':'#9e9e9e','primaryTextColor':'#263238','tertiaryTextColor':'#37474f'}}}%%
+
+flowchart LR
+    Manifest[("pyproject.toml")]
+    Lock[("uv.lock")]
+    PyPI[("🐍 PyPI JSON API")]
+
+    Direct["parse_direct_dependencies<br/>PEP 621 + PEP 735 names"]
+    Locked["parse_locked_versions<br/>current version per dep"]
+    Avail["parse_available_versions<br/>drop yanked + non-semver"]
+
+    Up["AvailableUpgrade[]<br/>(raw facts)"]
+    Policy["select_patch_candidates<br/>highest stable patch<br/>(pure, shared)"]
+    Apply["uv lock --upgrade-package<br/>pkg==target (lockfile-only)"]
+
+    Manifest --> Direct
+    Lock --> Locked
+    PyPI --> Avail
+    Direct --> Up
+    Locked --> Up
+    Avail --> Up
+    Up --> Policy
+    Policy --> Apply
+
+    class Direct,Locked,Avail,Apply new
+    class Up,Policy keep
+    class Manifest,Lock,PyPI ext
+classDef new fill:#e8f5e9,stroke:#2e7d32,stroke-width:2.5px,color:#1b5e20;
+classDef keep fill:#eef2f7,stroke:#5b6b7b,stroke-width:2px,color:#1e293b;
+classDef port fill:#fdf3e7,stroke:#cc7a30,stroke-width:2px,color:#8a4b12;
+classDef ext fill:#eceff1,stroke:#78909c,stroke-width:2px,color:#37474f;
+classDef drop fill:#fdeaea,stroke:#c0392b,stroke-width:2px,color:#7b241c;

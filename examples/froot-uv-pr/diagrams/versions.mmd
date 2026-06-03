@@ -1,0 +1,28 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif, system-ui, sans-serif','edgeLabelBackground':'#ffffff','lineColor':'#9e9e9e','primaryTextColor':'#263238','tertiaryTextColor':'#37474f'}}}%%
+
+flowchart TB
+    All["every published release<br/>(~70 for httpx, ~1500 for hypothesis)"]
+    Yank["drop fully-yanked / fileless"]
+    Sem{"Version.parse<br/>strict semver?"}
+    Drop["dropped, conservatively:<br/>1.3.0rc1 · 0.63b1 · 1!2.0<br/>2.0 · 1.2.3.4 · 1.2.post1"]
+    Keep["kept: 1.2.3 · 1.2.4 · 2.0.1 …"]
+    Patch{"is_patch_bump_of(current)<br/>same major.minor, higher, stable"}
+    Target["highest stable patch<br/>= the proposed target"]
+    None2["no candidate<br/>(propose nothing)"]
+
+    All --> Yank --> Sem
+    Sem -->|"not X.Y.Z"| Drop
+    Sem -->|"clean semver"| Keep
+    Keep --> Patch
+    Patch -->|"yes"| Target
+    Patch -->|"none"| None2
+
+    class All,Yank,Sem,Keep,Patch keep
+    class Drop drop
+    class Target new
+    class None2 ext
+classDef new fill:#e8f5e9,stroke:#2e7d32,stroke-width:2.5px,color:#1b5e20;
+classDef keep fill:#eef2f7,stroke:#5b6b7b,stroke-width:2px,color:#1e293b;
+classDef port fill:#fdf3e7,stroke:#cc7a30,stroke-width:2px,color:#8a4b12;
+classDef ext fill:#eceff1,stroke:#78909c,stroke-width:2px,color:#37474f;
+classDef drop fill:#fdeaea,stroke:#c0392b,stroke-width:2px,color:#7b241c;

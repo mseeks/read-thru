@@ -37,7 +37,7 @@ html.theme-dark {
    — code shown here is typically 80-column, so horizontal overflow is rare. */
 * { scrollbar-width: none; -ms-overflow-style: none; }
 *::-webkit-scrollbar { width: 0; height: 0; display: none; }
-html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   margin: 0; background: var(--bg); color: var(--ink);
   font-family: var(--serif); font-size: 18px; line-height: 1.68;
